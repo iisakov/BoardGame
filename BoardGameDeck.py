@@ -25,7 +25,7 @@ class BoardGameDeck:
             field_list = []
             for field in tile_value:
                 field_list.append(BoardGameField(field, self.field_desc[field]))
-            self.deck.append(BoardGameGex(field_list))
+            self.deck.append(BoardGameGex(field_list), )
             self.num_gex += 1
             if self.patt[0] in tile_value:
                 self.number_tile_with_current_field += 1

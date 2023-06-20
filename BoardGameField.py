@@ -1,13 +1,15 @@
 class BoardGameField:
-    f_type = 'default'
-    color = 'red'
 
-    def __init__(self, f_type: str, color: str):
-        self.f_type = f_type
-        self.color = color
+    def __init__(self, f_type: str = 'default', color: str = 'red'):
+        self.__f_type = f_type
+        self.__color = color
+        self.__siblings = []
 
     def get_type(self):
-        return self.f_type
+        return self.__f_type
 
     def get_color(self):
-        return self.color
+        return self.__color
+
+    def get_siblings(self):
+        return self.__siblings
