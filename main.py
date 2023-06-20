@@ -18,7 +18,7 @@ from PIL import ImageDraw
 list_i = []
 bgd = BoardGameDeck(n_type, m_field, patt, field_desc)
 bg = Image.new('RGB', (512, 512), (0, 0, 0))
-for i in range(10):
+for i in range(1000):
     bgm = BoardGameMap(bgd, 7)
     Printer.img_print_map(bgm, bg)
     bg.save(f'pic/map_{i}_{datetime.now()}.jpg')

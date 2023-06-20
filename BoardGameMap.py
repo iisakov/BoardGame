@@ -1,7 +1,7 @@
 from BoardGameDeck import BoardGameDeck
 from random import randint
 
-
+#TODO Добавить сетку гексов или соседей (Лучше всего сетку соседей)
 class BoardGameMap:
     map = []
     count_fields = {}
