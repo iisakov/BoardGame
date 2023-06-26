@@ -1,5 +1,4 @@
-from BoardGameField import BoardGameField
-
+from Components import BoardGameField, BoardGameVector
 
 class BoardGameGex:
 
@@ -10,6 +9,7 @@ class BoardGameGex:
         self.__fields = fields
         self.__is_put = False
         self.__siblings = set()
+        self.__coordinates = [BoardGameVector(0, 0)]
 
     def get_info(self):
         return f'{len(self.get_siblings())} {self.get_siblings() = }' \

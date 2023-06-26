@@ -1,5 +1,4 @@
-from BoardGameGex import BoardGameGex
-from BoardGameField import BoardGameField
+from Components import BoardGameField, BoardGameGex
 
 
 class BoardGameDeck:

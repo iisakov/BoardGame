@@ -1,3 +1,6 @@
+from Components import BoardGameVector
+
+
 class BoardGameField:
 
     def __init__(self, f_type: str = 'default', color: str = 'red'):

@@ -1,7 +1,7 @@
 import math
-
-from BoardGameDeck import BoardGameDeck
 from random import randint
+
+from Components import BoardGameDeck
 
 
 #TODO Добавить сетку гексов или соседей (Лучше всего сетку соседей)
@@ -18,8 +18,7 @@ class BoardGameMap:
             gex = deck.get_deck()[rand_i]
             if gex not in self.__map:
                 self.__map.append(gex)
-                gex.put()
-
+                # Выдаём центр первому(центральному) гексу
                 gex.set_center((0, 0))
                 if len(self.__map) > 1:
                     # Задружили текущий гекс с центральным

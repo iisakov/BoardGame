@@ -1,8 +1,8 @@
 import math
 
-from BoardGameGex import BoardGameGex
-from BoardGameDeck import BoardGameDeck
-from BoardGameMap import BoardGameMap
+from Components.BoardGameGex import BoardGameGex
+from Components.BoardGameDeck import BoardGameDeck
+from Components.BoardGameMap import BoardGameMap
 
 from PIL import Image
 from PIL import ImageDraw
