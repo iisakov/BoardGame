@@ -1,5 +1,5 @@
 from Components import BoardGameVector
-from math import pi
+from math import pi, sqrt
 
 
 class BoardGameField:
@@ -11,7 +11,7 @@ class BoardGameField:
         self.__f_type = f_type
         self.__color = color
         self.__center = center
-        self.__corners = [BoardGameVector.create_polar(2 if x % 2 == 0 else 1, x/2*pi) for x in range(1, 5)]
+        self.__corners = [BoardGameVector.create_polar(sqrt(3) if x % 2 == 0 else 1, x/2*pi) for x in range(1, 5)]
         self.__siblings = siblings
 
     @staticmethod
@@ -35,6 +35,7 @@ class BoardGameField:
 
     def get_corner(self):
         return [x.get() for x in self.__corners]
+
 
 class FieldGenerator:
     @staticmethod
