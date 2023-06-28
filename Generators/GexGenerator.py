@@ -1,2 +1,0 @@
-class GexGenerator:
-    pass

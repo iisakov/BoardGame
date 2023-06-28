@@ -45,3 +45,6 @@ class BoardGameMap:
 
     def get_stat(self):
         return self.count_fields
+
+    class MapGenerator:
+        pass

@@ -1,4 +1,4 @@
-from .BoardGameVector import BoardGameVector
+from .BoardGameVector import *
 from .BoardGameField import BoardGameField
 from .BoardGameGex import BoardGameGex
 from .BoardGameMap import BoardGameMap

@@ -1,5 +1,6 @@
 from Components import BoardGameField, BoardGameVector
 
+
 class BoardGameGex:
 
     def __init__(self, fields: list[BoardGameField], size=50):
@@ -59,3 +60,7 @@ class BoardGameGex:
 
     def remove(self):
         self.__is_put = False
+
+
+class GexGenerator:
+    pass

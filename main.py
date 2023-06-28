@@ -1,16 +1,17 @@
 #TODO Закончить разработку после достижения целей: 1) Отрисовки начальной карты с первым ходом игроков.
 
 from config import n_type, m_field, patt, field_desc
+import Components
 
-from Components import BoardGameDeck, BoardGameMap
-from Generators import VectorGenerator
+from PIL import Image, ImageDraw
 
-from PIL import Image
+field = Components.BoardGameField.create()
+board = Image.new('RGB', (500, 500), (100, 150, 100))
 
-list_i = []
-bgd = BoardGameDeck(n_type, m_field, patt, field_desc)
-bg = Image.new('RGB', (512, 512), (0, 0, 0))
-
-bgm = BoardGameMap(bgd, 7)
-
-print(VectorGenerator.gen((1, 2)))
+print(field.get_corner())
+corners = []
+for coord in field.get_corner():
+    corners.append((250+coord[0] * 25, 250+coord[1] * 25))
+draw = ImageDraw.Draw(board)
+draw.polygon(xy=corners, fill=(field.get_color()), outline=(0, 0, 0))
+board.show()
