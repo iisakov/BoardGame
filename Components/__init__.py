@@ -1,6 +1,6 @@
-from .BoardGameVector import *
-from .BoardGameField import BoardGameField
-from .BoardGameGex import BoardGameGex
-from .BoardGameMap import BoardGameMap
-from .BoardGameDeck import BoardGameDeck
-from .BoardGameSlot import BoardGameSlot
+from .BoardGameVector import BoardGameVector, VectorGenerator
+from .BoardGameField import BoardGameField, FieldGenerator
+from .BoardGameGex import *
+from .BoardGameMap import *
+from .BoardGameDeck import *
+from .BoardGameSlot import BoardGameSlot, SlotGenerator

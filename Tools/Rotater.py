@@ -12,7 +12,7 @@ class Rotater:
         angle_rad = angle*pi/180
         new_corners = []
         for corner in field.get_corners():
-            new_x = ((corner.get_x()) * cos(angle_rad)) - (corner.get_y()) * sin(angle_rad)
-            new_y = ((corner.get_x()) * sin(angle_rad)) + (corner.get_y()) * cos(angle_rad)
+            new_x = ((corner[0] - field.get_center().get_x()) * cos(angle_rad)) - (corner[1] - field.get_center().get_y()) * sin(angle_rad)
+            new_y = ((corner[0] - field.get_center().get_x()) * sin(angle_rad)) + (corner[1] - field.get_center().get_y()) * cos(angle_rad)
             new_corners.append(BoardGameVector.create(new_x, new_y))
         field.set_corner(new_corners)

@@ -6,17 +6,20 @@ class BoardGameField:
     def __init__(self,
                  f_type: str = 'default',
                  color: str = 'gray',
-                 center: BoardGameVector = BoardGameVector.create(0, 0)):
+                 center: BoardGameVector = BoardGameVector.create(0, 0),
+                 size: float = 1):
         self.__f_type = f_type
         self.__color = color
         self.__center = center
-        self.__corners = [BoardGameVector.create_polar(sqrt(3) if x % 2 == 0 else 1, x/2*pi) for x in range(1, 5)]
+        self.__size = size
+        self.__corners = [BoardGameVector.create_polar(sqrt(3)*size/2 if x % 2 == 0 else 1*size/2, x/2*pi) for x in range(1, 5)]
 
     @staticmethod
     def create(f_type: str = 'default',
                color: str = 'gray',
-               center: BoardGameVector = BoardGameVector.create(0, 0)):
-        return FieldGenerator.gen(f_type, color, center)
+               center: BoardGameVector = BoardGameVector.create(0, 0),
+               size: float = 1):
+        return FieldGenerator.gen(f_type, color, center, size)
 
     def get_type(self):
         return self.__f_type
@@ -31,7 +34,7 @@ class BoardGameField:
         return self.__center
 
     def get_corners(self):
-        return [x for x in self.__corners]
+        return [(vec.get_x()+self.__center.get_x(), vec.get_y()+self.__center.get_y()) for vec in self.__corners]
 
     def set_corner(self, corners):
         self.__corners = corners
@@ -41,5 +44,6 @@ class FieldGenerator:
     @staticmethod
     def gen(f_type: str,
             color: str,
-            center: BoardGameVector):
-        return BoardGameField(f_type, color, center)
+            center: BoardGameVector,
+            size: float = 1):
+        return BoardGameField(f_type, color, center, size)
