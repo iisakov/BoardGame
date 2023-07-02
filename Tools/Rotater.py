@@ -1,18 +1,35 @@
 from math import pi, sqrt, pow, cos, sin
 
+
+from Components.BoardGameSlot import BoardGameSlot
 from Components.BoardGameField import BoardGameField
+from Components.BoardGameGex import BoardGameGex
 from Components.BoardGameVector import BoardGameVector
 
 
 class Rotater:
+    # X = (x — x0) * cos(alpha) — (y — y0) * sin(alpha) + x0
+    # Y = (x — x0) * sin(alpha) + (y — y0) * cos(alpha) + y0
+    @staticmethod
+    def rotate(center: BoardGameVector, vec_list: list[tuple], angle: float or int):
+        angle_rad = angle * pi / 180
+        new_vec = []
+        for vec in vec_list:
+            new_x = ((vec[0] - center.get_x()) * cos(angle_rad)) - (vec[1] - center.get_y()) * sin(angle_rad)
+            new_y = ((vec[0] - center.get_x()) * sin(angle_rad)) + (vec[1] - center.get_y()) * cos(angle_rad)
+            new_vec.append(BoardGameVector.create(new_x, new_y))
+        return new_vec
+
+    @staticmethod
+    def slot_rotate(slot: BoardGameSlot, angle: float or int):
+        slot.set_field_centers(Rotater.rotate(slot.get_gex_center(), slot.get_field_centers(), angle))
+
     @staticmethod
     def field_rotate(field: BoardGameField, angle: float or int):
-        # X = (x — x0) * cos(alpha) — (y — y0) * sin(alpha) + x0
-        # Y = (x — x0) * sin(alpha) + (y — y0) * cos(alpha) + y0
-        angle_rad = angle*pi/180
-        new_corners = []
-        for corner in field.get_corners():
-            new_x = ((corner[0] - field.get_center().get_x()) * cos(angle_rad)) - (corner[1] - field.get_center().get_y()) * sin(angle_rad)
-            new_y = ((corner[0] - field.get_center().get_x()) * sin(angle_rad)) + (corner[1] - field.get_center().get_y()) * cos(angle_rad)
-            new_corners.append(BoardGameVector.create(new_x, new_y))
-        field.set_corner(new_corners)
+        field.set_corner(Rotater.rotate(field.get_center(), field.get_corners(), angle))
+
+    @staticmethod
+    def gex_rotate(gex: BoardGameGex, angle: float or int):
+        gex.set_corners(Rotater.rotate(gex.get_center(), gex.get_corners(), angle))
+        Rotater.slot_rotate(gex.get_slot(), angle)
+        #TODO Добавить изменение координат полей и поворот полей

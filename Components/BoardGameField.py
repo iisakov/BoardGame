@@ -4,22 +4,24 @@ from math import pi, sqrt
 
 class BoardGameField:
     def __init__(self,
+                 x: float = 0,
+                 y: float = 0,
                  f_type: str = 'default',
                  color: str = 'gray',
-                 center: BoardGameVector = BoardGameVector.create(0, 0),
                  size: float = 1):
         self.__f_type = f_type
         self.__color = color
-        self.__center = center
+        self.__center = BoardGameVector(x, y)
         self.__size = size
         self.__corners = [BoardGameVector.create_polar(sqrt(3)*size/2 if x % 2 == 0 else 1*size/2, x/2*pi) for x in range(1, 5)]
 
     @staticmethod
-    def create(f_type: str = 'default',
+    def create(x: float,
+               y: float,
+               f_type: str = 'default',
                color: str or tuple = 'gray',
-               center: BoardGameVector = BoardGameVector.create(0, 0),
                size: float = 1):
-        return FieldGenerator.gen(f_type, color, center, size)
+        return FieldGenerator.gen(x, y, f_type, color, size)
 
     def get_type(self):
         return self.__f_type
@@ -42,8 +44,9 @@ class BoardGameField:
 
 class FieldGenerator:
     @staticmethod
-    def gen(f_type: str,
+    def gen(x,
+            y,
+            f_type: str,
             color: str,
-            center: BoardGameVector,
             size: float = 1):
-        return BoardGameField(f_type, color, center, size)
+        return BoardGameField(x, y, f_type, color, size)

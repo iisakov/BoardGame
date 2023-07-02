@@ -1,5 +1,7 @@
 import math
 
+from Components.BoardGameSlot import BoardGameSlot
+from Components.BoardGameField import BoardGameField
 from Components.BoardGameGex import BoardGameGex
 from Components.BoardGameDeck import BoardGameDeck
 from Components.BoardGameMap import BoardGameMap
@@ -31,8 +33,22 @@ class Printer:
         print()
 
     @staticmethod
-    def img_print_gex(bg_gex: BoardGameGex, board: Image, radius=None, coord_x=None, coord_y=None):
-        pass
+    def img_print_slot(bg_slot: BoardGameSlot, board: Image):
+        draw = ImageDraw.Draw(board)
+        draw.point(bg_slot.get_gex_center().get(), 'blue')
+        draw.point(bg_slot.get_field_centers(), 'green')
+
+    @staticmethod
+    def img_print_field(bg_field: BoardGameField, board: Image):
+        draw = ImageDraw.Draw(board)
+        draw.polygon(bg_field.get_corners(), bg_field.get_color(), (255, 255, 255))
+
+
+    @staticmethod
+    def img_print_gex(bg_gex: BoardGameGex, board: Image):
+        draw = ImageDraw.Draw(board)
+        draw.point(bg_gex.get_center().get(), 'red')
+        draw.point(bg_gex.get_corners(), 'yellow')
 
     @staticmethod
     def img_print_map(bg_map: BoardGameMap, board: Image, coord_x=None, coord_y=None):
@@ -46,7 +62,7 @@ class Printer:
                 x = slot.get_gex_center().get_x()
                 y = slot.get_gex_center().get_y()
                 draw.point((x, y), 'yellow')
-                draw.point(slot.get_field_centres(), 'blue')
+                draw.point(slot.get_field_centers(), 'blue')
 
     @staticmethod
     def show_board(board):
