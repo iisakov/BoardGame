@@ -3,14 +3,14 @@ from Components import BoardGameVector
 
 
 class BoardGameSlot:
-    def __init__(self, x: float, y: float, size: float):
+    def __init__(self, x: int, y: int, size: float):
         self.__place = None
         self.__size = size
         self.__gex_center = BoardGameVector.create(x*size+size, y*size+size)
         self.__field_centers = [BoardGameVector.create_polar(0.5, pi*(angle*60+30)/180) for angle in range(0, 6)]
 
     @staticmethod
-    def create(x: float, y: float, size: float):
+    def create(x: int, y: int, size: float):
         return SlotGenerator.gen(x, y, size)
 
     def get_gex_center(self):
@@ -22,6 +22,9 @@ class BoardGameSlot:
     def get_place(self):
         return self.__place
 
+    def get_size(self):
+        return self.__size
+
     def __str__(self):
         return f'place: {"empty" if self.__place is None else self.__place}\n' \
                f'center: {self.__gex_center}\n'
@@ -29,7 +32,7 @@ class BoardGameSlot:
 
 class SlotGenerator:
     @staticmethod
-    def gen(x: float,
-            y: float,
+    def gen(x: int,
+            y: int,
             size: float):
         return BoardGameSlot(x, y, size)

@@ -16,7 +16,7 @@ class BoardGameField:
 
     @staticmethod
     def create(f_type: str = 'default',
-               color: str = 'gray',
+               color: str or tuple = 'gray',
                center: BoardGameVector = BoardGameVector.create(0, 0),
                size: float = 1):
         return FieldGenerator.gen(f_type, color, center, size)
