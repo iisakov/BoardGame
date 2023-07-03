@@ -29,14 +29,14 @@ class BoardGameField:
     def get_color(self):
         return self.__color
 
-    def get_siblings(self):
-        return self.__siblings
-
     def get_center(self):
         return self.__center
 
     def get_corners(self):
         return [(vec.get_x()+self.__center.get_x(), vec.get_y()+self.__center.get_y()) for vec in self.__corners]
+
+    def set_center(self, center):
+        self.__center = center
 
     def set_corner(self, corners):
         self.__corners = corners

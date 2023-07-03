@@ -46,9 +46,8 @@ class Printer:
 
     @staticmethod
     def img_print_gex(bg_gex: BoardGameGex, board: Image):
-        draw = ImageDraw.Draw(board)
-        draw.point(bg_gex.get_center().get(), 'red')
-        draw.point(bg_gex.get_corners(), 'yellow')
+        for field in bg_gex.get_fields():
+            Printer.img_print_field(field, board)
 
     @staticmethod
     def img_print_map(bg_map: BoardGameMap, board: Image, coord_x=None, coord_y=None):

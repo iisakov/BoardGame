@@ -1,13 +1,13 @@
-from math import pi
+from math import pi, sqrt
 from Components import BoardGameField, BoardGameVector
 from Components.BoardGameSlot import BoardGameSlot
 
 
 class BoardGameGex:
 
-    def __init__(self, x: int, y: int, fields_type: list[str], size: float):
+    def __init__(self, x: int or float, y: int, fields_type: list[str], size: float):
         self.__step_angle = 0
-        self.__slot = BoardGameSlot(x, y, size)
+        self.__slot = BoardGameSlot(x/2, sqrt(3)/2*y, size)
         self.__fields = self.init_fields(fields_type)
         self.__is_put = False
         self.__siblings = {}
@@ -24,12 +24,12 @@ class BoardGameGex:
         from Tools.Rotater import Rotater
         fields = []
         for num_type, _type in enumerate(fields_type):
-            field = BoardGameField.create(x=self.get_field_center()[num_type*2][0],
-                                          y=self.get_field_center()[num_type*2][1],
+            field = BoardGameField.create(x=self.get_field_center()[num_type*2-3][0],
+                                          y=self.get_field_center()[num_type*2-3][1],
                                           f_type= _type,
                                           size=self.get_size(),
                                           color= _type)
-            Rotater.field_rotate(field, 60*(num_type+4))
+            Rotater.field_rotate(field, 60*(num_type+1))
             fields.append(field)
         return fields
 
