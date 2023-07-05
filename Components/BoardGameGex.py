@@ -5,30 +5,30 @@ from Components.BoardGameSlot import BoardGameSlot
 
 class BoardGameGex:
 
-    def __init__(self, x: int or float, y: int, fields_type: list[str], size: float):
+    def __init__(self, x: int or float, y: int, fields_type: list[dict], size: float):
         self.__step_angle = 0
         self.__slot = BoardGameSlot(x/2, sqrt(3)/2*y, size)
         self.__fields = self.init_fields(fields_type)
-        self.__is_put = False
+        self.__is_pull = False
         self.__siblings = {}
         self.__corners = [BoardGameVector.create_polar(1*size, pi*(angle*60+30)/180) for angle in range(0, 6)]
 
     def __str__(self):
-        return f'{len(self.get_siblings())} {self.get_siblings() = }' \
+        return f'number siblings: {len(self.get_siblings())}' \
                f'\ncenter: {self.get_center()}' \
-               f'\n{len(self.get_fields())} {self.get_fields() = }' \
+               f'\ntypes field {[f.get_type() for f in self.get_fields()]}' \
                f'\ncorners: {[x.get() for x in self.__corners]}' \
-               f'\n{self.is_putted() = }\n'
+               f'\nis pulled: {"Yes" if self.is_pulled() else "No"}\n'
 
     def init_fields(self, fields_type):
         from Tools.Rotater import Rotater
         fields = []
-        for num_type, _type in enumerate(fields_type):
+        for num_type, raw_field in enumerate(fields_type):
             field = BoardGameField.create(x=self.get_field_center()[num_type*2-3][0],
                                           y=self.get_field_center()[num_type*2-3][1],
-                                          f_type= _type,
+                                          f_type= raw_field['type'],
                                           size=self.get_size(),
-                                          color= _type)
+                                          color= raw_field['color'])
             Rotater.field_rotate(field, 60*(num_type+1))
             fields.append(field)
         return fields
@@ -55,8 +55,8 @@ class BoardGameGex:
     def get_size(self):
         return self.__slot.get_size()
 
-    def is_putted(self):
-        return self.__is_put
+    def is_pulled(self):
+        return self.__is_pull
 
     def set_corners(self, corners):
         self.__corners = corners

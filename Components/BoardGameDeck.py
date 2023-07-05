@@ -1,36 +1,32 @@
 from Components import BoardGameField, BoardGameGex
+from random import shuffle, randint
 
 
 class BoardGameDeck:
-    deck = []
-    n_type = 0
-    m_field = 0
-    patt = None
-    field_desc = {}
-    num_gex = 0
-    number_tile_with_current_field = 0
+    def __init__(self, num_field, examples_field: list[dict], size: float):
+        self.__size = size
+        self.__num_field = num_field
+        self.__num_type = len(examples_field)
+        self.__examples_field = examples_field
+        self.__deck = []
 
-    def __init__(self, n, m, patt=None, field_desc=None):
-        self.n_type = n
-        self.m_field = m
-        self.patt = ''.join([str(x) for x in range(n)]) if patt is None else patt
-        self.field_desc = field_desc
-        self.render_deck()
-
-    def render_deck(self):
+    def create(self):
         import itertools
 
-        for tile_num, tile_value in enumerate(itertools.product(self.patt, repeat=self.m_field)):
-            field_list = []
-            for field in tile_value:
-                field_list.append(BoardGameField(field, self.field_desc[field]))
-            self.deck.append(BoardGameGex(field_list), )
-            self.num_gex += 1
-            if self.patt[0] in tile_value:
-                self.number_tile_with_current_field += 1
+        for raw_fields in itertools.product(self.__examples_field, repeat=self.__num_field):
+            self.__deck.append(BoardGameGex(x=randint(1, 17), y=randint(1, 8), fields_type=raw_fields, size=self.__size))
+
+        shuffle(self.__deck)
 
     def get_deck(self):
-        return self.deck
+        return self.__deck
 
-    def get_num_gex(self):
-        return self.num_gex
+    def __str__(self):
+        for i in self.__deck:
+            print(f"({', '.join([j.get_type() for j in i.get_fields()])})")
+        return ''
+
+    def pull_gex(self):
+        gex = self.__deck.pop()
+        print(f'Карт в колоде: {len(self.__deck)}')
+        return gex

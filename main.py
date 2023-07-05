@@ -1,7 +1,6 @@
 #TODO Закончить разработку после достижения целей: 1) Отрисовки начальной карты с первым ходом игроков.
 import random
 
-from config import n_type, m_field, patt, field_desc
 import Components
 from Tools.Rotater import Rotater
 from Tools.Printer import Printer
@@ -12,20 +11,31 @@ from math import sqrt
 size = 50
 board = Image.new('RGB', (550, int(550*sqrt(3)/2)), (0, 0, 0))
 draw = ImageDraw.Draw(board)
-bgm = Components.BoardGameMap(10, 10, size)
+bgm = Components.BoardGameMap(100, 100, size)
 
-for k in range(10):
-    board = Image.new('RGB', (550, int(550 * sqrt(3) / 2)), (0, 0, 0))
-    gexs = [Components.BoardGameGex(random.randint(5, 14), random.randint(2, 8), ['black', 'black', 'black'], size) for _ in range(20)]
+examples = [
+    {"type": 'shop', "color": (100, 200, 100)},
+    {"type": 'house', "color": (200, 100, 100)},
+    {"type": 'warehouse', "color": (100, 100, 100)},
+    {"type": 'park', "color": (100, 100, 200)}
+    ]
 
-    for i, gex in enumerate(gexs):
-        Rotater.gex_rotate(gex, 30*random.randint(0, 6))
-        Printer.img_print_slot(gex.get_slot(), board)
-        Printer.img_print_gex(gex, board)
+deck = Components.BoardGameDeck(3, examples, size)
+deck.create()
 
-    for i in bgm.get_slots():
-        for j in i:
-            Printer.img_print_slot(j, board)
+frames = []
+while len(deck.get_deck()) > 0:
+    gex = deck.pull_gex()
+    Rotater.gex_rotate(gex, random.randint(0, 180))
+    Printer.img_print_gex(gex, board)
+    frames.append(board.copy())
 
 # board.show()
-    board.save(f'size_{k}.jpg')
+frames[0].save(
+    'gex.gif',
+    save_all=True,
+    append_images=frames[1:],
+    optimize=True,
+    duration=1,
+    loop=0
+)

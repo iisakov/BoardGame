@@ -16,23 +16,6 @@ class Printer:
     angle_radians = [math.pi / 180 * angle_degree for angle_degree in angle_degrees]
 
     @staticmethod
-    def console_print_gex(bg_gex: BoardGameGex):
-        for i in bg_gex.get_gex():
-            print(i)
-
-    @staticmethod
-    def console_print_deck(bg_deck: BoardGameDeck):
-        str1, str2 = '', ''
-        for gex_num, gex in enumerate(bg_deck.get_deck()):
-            str_list = gex.get_gex()
-            str1 += ' ' + str_list[0]
-            str2 += ' ' + str_list[1]
-            if (gex_num + 1) % (bg_deck.n_type * 2) == 0:
-                print(f'{str1}\n{str2}')
-                str1, str2 = '', ''
-        print()
-
-    @staticmethod
     def img_print_slot(bg_slot: BoardGameSlot, board: Image):
         draw = ImageDraw.Draw(board)
         draw.point(bg_slot.get_gex_center().get(), 'blue')
@@ -41,7 +24,7 @@ class Printer:
     @staticmethod
     def img_print_field(bg_field: BoardGameField, board: Image):
         draw = ImageDraw.Draw(board)
-        draw.polygon(bg_field.get_corners(), bg_field.get_color(), (255, 255, 255))
+        draw.polygon(bg_field.get_corners(), bg_field.get_color(), (50, 50, 50))
 
 
     @staticmethod
