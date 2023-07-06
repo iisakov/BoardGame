@@ -30,8 +30,8 @@ class Rotater:
 
     @staticmethod
     def gex_rotate(gex: BoardGameGex, angle: float or int):
-        gex.set_corners(Rotater.rotate(gex.get_center(), gex.get_corners(), angle))
         Rotater.slot_rotate(gex.get_slot(), angle)
+        gex.add_angle(angle)
         for nem_field, field in enumerate(gex.get_fields()):
             x = gex.get_field_center()[nem_field * 2 - 3][0]
             y = gex.get_field_center()[nem_field * 2 - 3][1]

@@ -9,16 +9,16 @@ class BoardGameGex:
         self.__step_angle = 0
         self.__slot = BoardGameSlot(x/2, sqrt(3)/2*y, size)
         self.__fields = self.init_fields(fields_type)
-        self.__is_pull = False
+        self.__status = False
+        self.__angle = 0
         self.__siblings = {}
-        self.__corners = [BoardGameVector.create_polar(1*size, pi*(angle*60+30)/180) for angle in range(0, 6)]
 
     def __str__(self):
         return f'number siblings: {len(self.get_siblings())}' \
                f'\ncenter: {self.get_center()}' \
-               f'\ntypes field {[f.get_type() for f in self.get_fields()]}' \
-               f'\ncorners: {[x.get() for x in self.__corners]}' \
-               f'\nis pulled: {"Yes" if self.is_pulled() else "No"}\n'
+               f'\ntypes field: {[f.get_type() for f in self.get_fields()]}' \
+               f'\nangle: {self.__angle}' \
+               f'\nstatus: {self.get_status()}\n'
 
     def init_fields(self, fields_type):
         from Tools.Rotater import Rotater
@@ -33,6 +33,42 @@ class BoardGameGex:
             fields.append(field)
         return fields
 
+    def deploy(self, x=0, y=0):
+        if self.__status not in ('deployed', 'in deck'):
+            from Tools.Mover import Mover
+            Mover.deploy_gex(self, x, y)
+            return self
+        else:
+            print('gex not deploy - is', self.__status)
+            return False
+
+    def move(self, x, y):
+        if self.__status not in ('deployed', 'in deck'):
+            from Tools.Mover import Mover
+            Mover.move_gex(self, x, y)
+            return self
+        else:
+            print('gex not move - is', self.__status)
+            return False
+
+    def rotate(self, angle):
+        if self.__status not in ('deployed', 'in deck'):
+            from Tools.Rotater import Rotater
+            Rotater.gex_rotate(self, angle)
+            return self
+        else:
+            print('gex not rotate - is', self.__status)
+            return False
+
+    def print(self, board):
+        if self.__status in ('deployed'):
+            from Tools.Printer import Printer
+            Printer.img_print_gex(self, board)
+            return self
+        else:
+            print('gex not print - is', self.__status)
+            return False
+
     def get_slot(self):
         return self.__slot
 
@@ -45,33 +81,29 @@ class BoardGameGex:
     def get_field_center(self):
         return self.get_slot().get_field_centers()
 
-    def get_corners(self):
-        return [(corner.get_x()+self.__slot.get_gex_center().get_x(),
-                 corner.get_y()+self.__slot.get_gex_center().get_y()) for corner in self.__corners]
-
     def get_siblings(self):
         return self.__siblings
 
     def get_size(self):
         return self.__slot.get_size()
 
-    def is_pulled(self):
-        return self.__is_pull
+    def get_angle(self):
+        return self.__angle
 
-    def set_corners(self, corners):
-        self.__corners = corners
+    def add_angle(self, angle):
+        self.__angle += angle
+
+    def get_status(self):
+        return self.__status
+
+    def set_status(self, status: str):
+        self.__status = status
 
     def set_fields(self, fields: list[BoardGameField]):
         self.__fields = fields
 
     def add_siblings(self, sibling_gex):
         self.__siblings.add(sibling_gex)
-
-    def put(self):
-        self.__is_put = True
-
-    def remove(self):
-        self.__is_put = False
 
 
 class GexGenerator:

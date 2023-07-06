@@ -8,13 +8,15 @@ class BoardGameDeck:
         self.__num_field = num_field
         self.__num_type = len(examples_field)
         self.__examples_field = examples_field
-        self.__deck = []
+        self.__deck: list[BoardGameGex] = []
 
     def create(self):
         import itertools
 
         for raw_fields in itertools.product(self.__examples_field, repeat=self.__num_field):
-            self.__deck.append(BoardGameGex(x=randint(1, 17), y=randint(1, 8), fields_type=raw_fields, size=self.__size))
+            gex = BoardGameGex(x=0, y=0, fields_type=raw_fields, size=self.__size)
+            gex.set_status('in deck')
+            self.__deck.append(gex)
 
         shuffle(self.__deck)
 
@@ -28,5 +30,9 @@ class BoardGameDeck:
 
     def pull_gex(self):
         gex = self.__deck.pop()
+        gex.set_status('pulled')
         print(f'Карт в колоде: {len(self.__deck)}')
         return gex
+
+class DeckGenerator:
+    pass

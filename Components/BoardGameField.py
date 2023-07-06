@@ -35,7 +35,7 @@ class BoardGameField:
     def get_corners(self):
         return [(vec.get_x()+self.__center.get_x(), vec.get_y()+self.__center.get_y()) for vec in self.__corners]
 
-    def set_center(self, center):
+    def set_center(self, center: BoardGameVector):
         self.__center = center
 
     def set_corner(self, corners):

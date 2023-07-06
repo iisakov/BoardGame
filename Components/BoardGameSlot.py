@@ -3,7 +3,7 @@ from Components import BoardGameVector
 
 
 class BoardGameSlot:
-    def __init__(self, x: int, y: int, size: float):
+    def __init__(self, x: int or float, y: int or float, size: float):
         self.__place = None
         self.__size = size
         self.__gex_center = BoardGameVector.create(x*size+size, y*size+size)
