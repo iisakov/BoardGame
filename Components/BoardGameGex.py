@@ -1,6 +1,7 @@
 from math import pi, sqrt
 from Components import BoardGameField, BoardGameVector
 from Components.BoardGameSlot import BoardGameSlot
+from Components.BoardGameMap import BoardGameMap
 
 
 class BoardGameGex:
@@ -16,6 +17,7 @@ class BoardGameGex:
     def __str__(self):
         return f'number siblings: {len(self.get_siblings())}' \
                f'\ncenter: {self.get_center()}' \
+               f'\nplace: {self.get_place()}' \
                f'\ntypes field: {[f.get_type() for f in self.get_fields()]}' \
                f'\nangle: {self.__angle}' \
                f'\nstatus: {self.get_status()}\n'
@@ -33,10 +35,10 @@ class BoardGameGex:
             fields.append(field)
         return fields
 
-    def deploy(self, x=0, y=0):
+    def deploy(self, bg_map: BoardGameMap, x=0, y=0):
         if self.__status not in ('deployed', 'in deck'):
             from Tools.Mover import Mover
-            Mover.deploy_gex(self, x, y)
+            Mover.deploy_gex(self, bg_map, x, y)
             return self
         else:
             print('gex not deploy - is', self.__status)
@@ -72,11 +74,20 @@ class BoardGameGex:
     def get_slot(self):
         return self.__slot
 
+    def get_direction(self):
+        return self.__slot.get_direction()
+
+    def set_direction(self, direction):
+        self.__slot.set_direction(direction)
+
     def get_fields(self):
         return self.__fields
 
     def get_center(self):
         return self.__slot.get_gex_center()
+
+    def get_place(self):
+        return self.__slot.get_place()
 
     def get_field_center(self):
         return self.get_slot().get_field_centers()

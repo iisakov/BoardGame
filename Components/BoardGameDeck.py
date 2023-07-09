@@ -14,7 +14,7 @@ class BoardGameDeck:
         import itertools
 
         for raw_fields in itertools.product(self.__examples_field, repeat=self.__num_field):
-            gex = BoardGameGex(x=0, y=0, fields_type=raw_fields, size=self.__size)
+            gex = BoardGameGex.BoardGameGex(x=0, y=0, fields_type=raw_fields, size=self.__size)
             gex.set_status('in deck')
             self.__deck.append(gex)
 
