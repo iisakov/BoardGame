@@ -38,6 +38,9 @@ class BoardGameSlot:
     def set_direction(self, direction):
         self.__direction = direction
 
+    def add_direction(self, direction):
+        self.__direction = (self.__direction + direction) % 2
+
     def __str__(self):
         return f'place: {"empty" if self.__place is None else self.__place}\n' \
                f'center: {self.__gex_center}\n' \

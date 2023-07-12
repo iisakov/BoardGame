@@ -26,7 +26,8 @@ class BoardGameGex:
         from Tools.Rotater import Rotater
         fields = []
         for num_type, raw_field in enumerate(fields_type):
-            field = BoardGameField.create(x=self.get_field_center()[num_type*2-3][0],
+            field = BoardGameField.create(direction=0,
+                                          x=self.get_field_center()[num_type*2-3][0],
                                           y=self.get_field_center()[num_type*2-3][1],
                                           f_type= raw_field['type'],
                                           size=self.get_size(),
@@ -91,6 +92,12 @@ class BoardGameGex:
 
     def get_field_center(self):
         return self.get_slot().get_field_centers()
+
+    def get_field_by_direction(self, direction):
+        for field in self.__fields:
+            if field.get_direction() == direction:
+                return field
+        return False
 
     def get_siblings(self):
         return self.__siblings

@@ -23,11 +23,12 @@ class Rotater:
     @staticmethod
     def slot_rotate(slot: BoardGameSlot, angle: float or int):
         slot.set_field_centers(Rotater.rotate(slot.get_gex_center(), slot.get_field_centers(), angle))
-        slot.set_direction(angle/60%2)
+        slot.add_direction(angle/60)
 
     @staticmethod
     def field_rotate(field: BoardGameField, angle: float or int):
         field.set_corner(Rotater.rotate(field.get_center(), field.get_corners(), angle))
+        field.add_direction(angle/60)
 
     @staticmethod
     def gex_rotate(gex: BoardGameGex, angle: float or int):
