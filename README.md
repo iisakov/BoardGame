@@ -18,3 +18,8 @@
 Финишная прямая
 ![map](https://github.com/iisakov/BoardGame/assets/59264679/2fa3c4f3-529d-4004-9d29-98ed46d11cfc)
 ![map](https://github.com/iisakov/BoardGame/assets/59264679/1843f6bb-34c1-4cc1-b71c-b21eeb3c6660)
+
+
+А теперь собирать статистику (но для этого, сначала нужно убирать лишние поля)
+![map_0_1_False](https://github.com/iisakov/BoardGame/assets/59264679/af2d9095-336e-4382-816d-0d6559165149)
+![map_0_1_False](https://github.com/iisakov/BoardGame/assets/59264679/caba162a-682f-4b02-b42c-367dc17e3f76)
