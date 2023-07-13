@@ -6,7 +6,7 @@ from Components.BoardGameSlot import BoardGameSlot
 
 
 class BoardGameMap:
-    def __init__(self, height: int, width: int, size: float = 1):
+    def __init__(self):
         self.__slots = []
         self.__deployed_gex = set()
         self.__available_place = set()
@@ -23,13 +23,13 @@ class BoardGameMap:
         self.remove_available_place(current_place)
         field_type = {x.get_direction(): x.get_type() for x in gex.get_fields()}
         if gex.get_direction() == 0:
-            self.add_available_place((place_x-1, place_y-1, 1, field_type[2], 2))
-            self.add_available_place((place_x-1, place_y+1, 1, field_type[1], 1))
-            self.add_available_place((place_x+2, place_y, 1, field_type[0], 0))
+            self.add_available_place((place_x-1, place_y-1, 1, field_type[2], 2, gex))
+            self.add_available_place((place_x-1, place_y+1, 1, field_type[1], 1, gex))
+            self.add_available_place((place_x+2, place_y, 1, field_type[0], 0, gex))
         else:
-            self.add_available_place((place_x+1, place_y-1, 0, field_type[1], 1))
-            self.add_available_place((place_x+1, place_y+1, 0, field_type[2], 2))
-            self.add_available_place((place_x-2, place_y, 0, field_type[0], 0))
+            self.add_available_place((place_x+1, place_y-1, 0, field_type[1], 1, gex))
+            self.add_available_place((place_x+1, place_y+1, 0, field_type[2], 2, gex))
+            self.add_available_place((place_x-2, place_y, 0, field_type[0], 0, gex))
 
     def add_available_place(self, place):
         if place not in self.__occupied_place:
@@ -44,8 +44,14 @@ class BoardGameMap:
     def get_occupied_place(self):
         return list(self.__occupied_place)
 
-    def get_deployed_gex(self):
-        return [{'gex': gex, 'place': (*gex.get_place(), int(gex.get_direction()))} for gex in self.__deployed_gex]
+    def get_deployed_gex(self) -> {tuple:BoardGameGex}:
+        return {(*gex.get_place(), int(gex.get_direction())): gex for gex in self.__deployed_gex}
+
+    def get_deployed_gex_by_place(self, place: tuple):
+        gexes = {(*gex.get_place(), int(gex.get_direction())): gex for gex in self.__deployed_gex}
+        if place in gexes:
+            return gexes[place]
+        else: False
 
     def get_available_place(self):
         result = list(self.__available_place)
@@ -54,6 +60,14 @@ class BoardGameMap:
 
     def get_random_available_place(self):
         return random.choice(self.get_available_place())
+
+    def get_statistics(self):
+        result = {}
+        for gex in self.get_deployed_gex().values():
+            for field in gex.get_fields():
+                f_type = field.get_type()
+                result[f_type] = result.setdefault(f_type, 0) + 1
+        return result
 
     class MapGenerator:
         pass

@@ -27,6 +27,11 @@ class BoardGameField:
                size: float = 1):
         return FieldGenerator.gen(direction, x, y, f_type, color, size)
 
+    def print(self, board):
+        from Tools.Printer import Printer
+        Printer.img_print_field(self, board)
+        return self
+
     def get_type(self):
         return self.__f_type
 
@@ -53,6 +58,10 @@ class BoardGameField:
 
     def add_direction(self, direction):
         self.__direction = (self.__direction-direction) % 3
+
+    def set_type(self, f_type: str, color: tuple):
+        self.__f_type = f_type
+        self.__color = color
 
 class FieldGenerator:
     @staticmethod

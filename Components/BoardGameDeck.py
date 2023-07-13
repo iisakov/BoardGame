@@ -31,14 +31,14 @@ class BoardGameDeck:
     def pull_gex(self):
         gex = self.__deck.pop()
         gex.set_status('pulled')
-        print(f'Карт в колоде: {len(self.__deck)}')
+        # print(f'Карт в колоде: {len(self.__deck)}')
         return gex
 
     def push_gex(self, gex):
         self.__deck.append(gex)
         gex.set_status('in deck')
         shuffle(self.__deck)
-        print(f'Карт в колоде: {len(self.__deck)}')
+        # print(f'Карт в колоде: {len(self.__deck)}')
 
 class DeckGenerator:
     pass
