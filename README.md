@@ -23,3 +23,8 @@
 А теперь собирать статистику (но для этого, сначала нужно убирать лишние поля)
 ![map_0_1_False](https://github.com/iisakov/BoardGame/assets/59264679/af2d9095-336e-4382-816d-0d6559165149)
 ![map_0_1_False](https://github.com/iisakov/BoardGame/assets/59264679/caba162a-682f-4b02-b42c-367dc17e3f76)
+
+
+Статистика и выкладывание гексов по правилам
+![map_0_500_True](https://github.com/iisakov/BoardGame/assets/59264679/8d8dd3e4-0323-4507-b510-2119e6893865)
+![image](https://github.com/iisakov/BoardGame/assets/59264679/74d93a65-d178-4ead-946c-b4ab6619c413)
