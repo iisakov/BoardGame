@@ -1,95 +1,54 @@
 #TODO Закончить разработку после достижения целей: 1) Отрисовки начальной карты с первым ходом игроков.
 
-import csv
 import Components
-
-from PIL import Image, ImageDraw
-from math import sqrt
+import Tools.Printer
 
 
-speed = 500
-count = 10000
-flicker = False
-img_save = False
-gif_save = False
+speed = 1500
+count = 100
+flicker = True
+img_save = True
+gif_save = True
 size = 50
+frames = []
 
-examples = [{"type": 'shop', "color": (100, 100, 200)}, {"type": 'house', "color": (200, 100, 100)},
-            {"type": 'warehouse', "color": (100, 100, 100)}, {"type": 'park', "color": (100, 200, 100)}]
+game = Components.BoardGame(num_players=4, num_gex_in_hand=2, size=size)
 
-for era in range(count):
-    board = Image.new('RGB', (1200, int(1200 * sqrt(3) / 2)), (0, 0, 0))
-    draw = ImageDraw.Draw(board)
-    bg_map = Components.BoardGameMap()
-    deck = Components.BoardGameDeck(3, examples, size)
-    deck.create()
+board = game.get_board()
+draw = game.get_draw()
+bg_map = game.get_map()
+deck = game.get_deck()
+discard = game.get_discard()
 
-    frames = []
-    deck.pull_gex().rotate(0).deploy(bg_map, 19, 10).print(board)
 
-    frames.append(board.copy())
-    old_frame = board.copy()
-    while len(deck.get_deck()) > 0:
-        second_gex = deck.pull_gex()
-        deployed = False
-        for i, place in enumerate(bg_map.get_available_place()):
-            if i == 0: second_gex.rotate(place[2] * 60)
+game.start()
+bg_map.print_map(board)
+frames.append(board.copy())
 
-            if second_gex.get_direction() == 0:
-                possible_places = [{'x': place[0] - 1, 'y': place[1] - 1, 'gex_direction': 1, 'field_direction': 2},
-                                   {'x': place[0] - 1, 'y': place[1] + 1, 'gex_direction': 1, 'field_direction': 1},
-                                   {'x': place[0] + 2, 'y': place[1], 'gex_direction': 1, 'field_direction': 0}]
-            else:
-                possible_places = [{'x': place[0] + 1, 'y': place[1] - 1, 'gex_direction': 0, 'field_direction': 1},
-                                   {'x': place[0] + 1, 'y': place[1] + 1, 'gex_direction': 0, 'field_direction': 2},
-                                   {'x': place[0] - 2, 'y': place[1], 'gex_direction': 0, 'field_direction': 0}]
-            fields = [bg_map.get_deployed_gex_by_place(
-                (place['x'], place['y'], place['gex_direction'])).get_field_by_direction(place['field_direction']) for
-                      place in possible_places if
-                      bg_map.get_deployed_gex_by_place((place['x'], place['y'], place['gex_direction']))]
+i = 0
+while deck.get_num_gex_in_deck() > 0:
+    i += 1
+    Tools.Printer.Printer.img_print_text(x=0, y=0, x_2=1200, y_2=50, font_size=30, text=f'Ход - {i}', board=board)
+    for player in game.get_players():
+        for _ in range(game.get_num_gex_in_hand()):
+            player.take_gex_in_hand(deck.pull_gex())
 
-            if second_gex.get_field_by_direction(place[4]).get_type() == place[3]\
-                    and (place[0], place[1]) not in [(opl[0], opl[1]) for opl in bg_map.get_occupied_place()]\
-                    and second_gex.get_direction() == place[2]\
-                    and len(fields) < 3:
-                for field in fields:
-                    field.set_type('covered', (10, 10, 10))
-                    if img_save or gif_save: field.print(board)
-                if img_save or gif_save:
-                    new_frame = board.copy()
-                    frames.append(new_frame)
-                    if flicker:
-                        frames.append(old_frame)
-                        frames.append(new_frame)
-                second_gex.deploy(bg_map, place[0], place[1])
-                if img_save or gif_save:
-                    second_gex.print(board)
-                    new_frame = board.copy()
-                    frames.append(new_frame)
-                    old_frame = new_frame
-                deployed = True
-                break
-            else:
-                second_gex.rotate(60)
-        if not deployed:
-            deck.push_gex(second_gex)
+    for player in game.get_players():
+        while player.get_num_gex_in_hand() > 0:
+            player.deploy_gex(bg_map)
+            Tools.Printer.Printer.img_print_text(x=0, y=40, x_2=1200, y_2=90, font_size=30, text=f'Игрок - {player.get_name()}', board=board)
+            Tools.Printer.Printer.img_print_text(x=0, y=80, x_2=1200, y_2=130, font_size=30, text=f'{bg_map.get_statistics()}', board=board)
+            Tools.Printer.Printer.img_print_text(x=0, y=130, x_2=700, y_2=350, font_size=20, text=f'{game}', board=board)
 
-    with open(f'stats_{count}.csv', 'a') as fp:
-        stat = bg_map.get_statistics()
+        bg_map.print_map(board)
+        frames.append(board.copy())
 
-        writer = csv.DictWriter(fp, fieldnames=sorted(stat.keys()))
-        writer.writerow(stat)
-        print('Добавили строку', stat, f'Осталось {count - era} из {count}')
 
-    # board.show()
-    if img_save:
-        board.save(f"imgs/map_{era}_{speed}_{flicker}.jpg")
-    if gif_save:
-        frames[0].save(
-            f'gifs/map_{era}_{speed}_{flicker}.gif',
-            save_all=True,
-            append_images=frames[1:],
-            optimize=True,
-            duration=speed,
-            loop=0
-        )
+frames[0].save(
+    f'map_{speed}_{flicker}.gif',
+    save_all=True,
+    append_images=frames[1:],
+    optimize=True,
+    duration=speed,
+    loop=0
+)

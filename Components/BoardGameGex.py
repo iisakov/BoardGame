@@ -10,17 +10,15 @@ class BoardGameGex:
         self.__step_angle = 0
         self.__slot = BoardGameSlot(x/2, sqrt(3)/2*y, size)
         self.__fields = self.init_fields(fields_type)
-        self.__status: str = 'statusless'
+        self.__status: str or None = None
         self.__angle = 0
-        self.__siblings = {}
 
     def __str__(self):
-        return f'number siblings: {len(self.get_siblings())}' \
-               f'\ncenter: {self.get_center()}' \
-               f'\nplace: {self.get_place()}' \
-               f'\ntypes field: {[f.get_type() for f in self.get_fields()]}' \
-               f'\nangle: {self.__angle}' \
-               f'\nstatus: {self.get_status()}\n'
+        return f'\n\tcenter: {self.get_center()}' \
+               f'\n\tplace: {self.get_place()}' \
+               f'\n\ttypes field: {[f.get_type() for f in self.get_fields()]}' \
+               f'\n\tangle: {self.__angle}' \
+               f'\n\tstatus: {self.get_status()}\n'
 
     def init_fields(self, fields_type):
         from Tools.Rotater import Rotater
@@ -87,8 +85,8 @@ class BoardGameGex:
     def get_fields_with_direction(self):
         return {field.get_direction(): field for field in self.get_fields()}
 
-    def get_field_by_direction(self, direction):
-        return self.get_fields_with_direction()[direction]
+    # def get_field_by_direction(self, direction):
+    #     return self.get_fields_with_direction()[direction]
 
     def get_center(self):
         return self.__slot.get_gex_center()
@@ -104,6 +102,9 @@ class BoardGameGex:
             if field.get_direction() == direction:
                 return field
         return False
+
+    def get_fields_types(self):
+        return [field.get_type() for field in self.get_fields()]
 
     def get_siblings(self):
         return self.__siblings

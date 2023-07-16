@@ -10,18 +10,24 @@ class BoardGameDeck:
         self.__examples_field = examples_field
         self.__deck: list[BoardGameGex] = []
 
-    def create(self):
+    @staticmethod
+    def create(num_field, examples_field: list[dict], size: float):
+        pre_deck = DeckGenerator.gen(num_field, examples_field, size)
         import itertools
 
-        for raw_fields in itertools.product(self.__examples_field, repeat=self.__num_field):
-            gex = BoardGameGex.BoardGameGex(x=0, y=0, fields_type=raw_fields, size=self.__size)
+        for raw_fields in itertools.product(pre_deck.__examples_field, repeat=pre_deck.__num_field):
+            gex = BoardGameGex.BoardGameGex(x=0, y=0, fields_type=raw_fields, size=pre_deck.__size)
             gex.set_status('in deck')
-            self.__deck.append(gex)
+            pre_deck.__deck.append(gex)
 
-        shuffle(self.__deck)
+        shuffle(pre_deck.__deck)
+        return pre_deck
 
     def get_deck(self):
         return self.__deck
+
+    def get_num_gex_in_deck(self):
+        return len(self.__deck)
 
     def __str__(self):
         for i in self.__deck:
@@ -40,5 +46,10 @@ class BoardGameDeck:
         shuffle(self.__deck)
         # print(f'Карт в колоде: {len(self.__deck)}')
 
+
 class DeckGenerator:
-    pass
+    @staticmethod
+    def gen(num_field,
+            examples_field: list[dict],
+            size: float):
+        return BoardGameDeck(num_field, examples_field, size)

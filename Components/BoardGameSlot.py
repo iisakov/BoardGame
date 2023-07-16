@@ -6,7 +6,7 @@ class BoardGameSlot:
     def __init__(self, x: int or float, y: int or float, size: float):
         self.__place = (x, y)
         self.__size = size
-        self.__gex_center = BoardGameVector.create(x*size+size, y*size+size)
+        self.__gex_center = BoardGameVector.create(x*size, y*size)
         self.__field_centers = [BoardGameVector.create_polar(0.5*size, pi*(angle*60+30)/180) for angle in range(0, 6)]
         self.__direction = 0
 
