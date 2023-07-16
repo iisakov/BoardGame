@@ -28,3 +28,6 @@
 Статистика и выкладывание гексов по правилам
 ![map_0_500_True](https://github.com/iisakov/BoardGame/assets/59264679/8d8dd3e4-0323-4507-b510-2119e6893865)
 ![image](https://github.com/iisakov/BoardGame/assets/59264679/74d93a65-d178-4ead-946c-b4ab6619c413)
+
+Статистика на экране, по ходам и по игрокам.
+![map_1500_True](https://github.com/iisakov/BoardGame/assets/59264679/74d66c7a-6bff-4859-9e50-e13f88a9c916)
