@@ -39,6 +39,9 @@ class BoardGamePlayer:
     def get_name(self):
         return self.__name
 
+    def get_hand(self):
+        return [gex.get_fields_types() for gex in self.__hand]
+
     def get_num_gex_in_hand(self):
         return self.__num_gex_in_hand
 
@@ -50,8 +53,17 @@ class BoardGamePlayer:
                 current_active_gex = self.__active_gex
                 self.__active_gex = self.pull_random_gex_from_hand()
                 self.__hand.add(current_active_gex)
-        else:
+            return True
+        elif self.__num_gex_in_hand == 1:
+            if self.__active_gex is None:
+                self.__active_gex = self.pull_random_gex_from_hand()
             return False
+
+    def discard_active_gex(self):
+        gex = self.__active_gex
+        self.__active_gex = None
+        self.__num_gex_in_hand -= 1
+        return gex
 
     def deploy_gex(self, bg_map):
         deployed = False
@@ -73,14 +85,16 @@ class BoardGamePlayer:
                 for field in fields:
                     field.set_type('COVERED', (10, 10, 10))
                 self.__active_gex.deploy(bg_map, place[0], place[1])
-                deployed = True
                 self.__num_gex_in_hand -= 1
                 self.set_active_gex(self.pull_random_gex_from_hand())
-                break
+                return True
             else:
                 self.__active_gex.rotate(60)
-            if not deployed:
-                self.chang_active_gex()
+        if not deployed:
+            if self.chang_active_gex():
+                return True
+            else:
+                return False
 
     def __str__(self):
         return f'{"-"*100}' \

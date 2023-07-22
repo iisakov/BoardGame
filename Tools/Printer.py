@@ -17,10 +17,16 @@ class Printer:
     angle_radians = [math.pi / 180 * angle_degree for angle_degree in angle_degrees]
 
     @staticmethod
-    def img_print_text(x, y, x_2, y_2, font_size, text, board: Image):
+    def img_print_text(x: float or int, y: float or int, font_size, text: str, board: Image):
         draw = ImageDraw.Draw(board)
         font = ImageFont.truetype('OpenSans-Regular.ttf', font_size)
-        draw.polygon(xy=((x, y), (x_2, y), (x_2, y_2), (x, y_2)), fill=(0, 0, 0), outline=(100, 100, 100))
+        lines = text.split('\n')
+        num_line = len(text.split('\n'))
+        max_len = len(sorted(lines)[0])
+        x_end = x + max_len * font_size * 0.55
+        y_end = y + num_line * font_size * 1.5
+
+        draw.rectangle(xy=((x, y), (x_end, y_end)), fill=(0, 0, 0), outline=(100, 100, 100))
         draw.text((x, y), text, font=font, fill=(100, 100, 100))
 
     @staticmethod
@@ -57,5 +63,5 @@ class Printer:
         board.show()
 
     @staticmethod
-    def save_board(board, board_name):
-        board.save(f'{board_name}.jpg', quality=95)
+    def save_board(board, board_name, path):
+        board.save(f'{path}/{board_name}.jpg', quality=95)

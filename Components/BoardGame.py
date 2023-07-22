@@ -32,6 +32,7 @@ class BoardGame:
                f'\nКарт в колоде: {self.__deck.get_num_gex_in_deck()}' \
                f'\nКарт в сбросе: {self.__discard.get_num_gex_in_deck()}' \
                f'\nКарт на поле: {self.__map.get_num_deployed_gex()}'
+
     def start(self):
         self.__deck.pull_gex().rotate(0).deploy(self.__map, self.__count_slots, self.__count_slots/2)
         self.__deck.pull_gex().rotate(0).deploy(self.__map, self.__count_slots-3, self.__count_slots/2+1)
@@ -47,6 +48,8 @@ class BoardGame:
         else:
             for _ in range(self.__deck.get_num_gex_in_deck() - (self.__num_players*self.__num_gex_in_hand*7)):
                 self.__discard.push_gex(self.__deck.pull_gex())
+
+        return self
 
     def get_num_players(self):
         return self.__num_players
@@ -64,6 +67,9 @@ class BoardGame:
     def get_deck(self) -> BoardGameDeck:
         return self.__deck
 
+    def get_num_gex_in_deck(self):
+        return self.get_deck().get_num_gex_in_deck()
+
     def get_discard(self) -> BoardGameDeck:
         return self.__discard
 
@@ -75,3 +81,43 @@ class BoardGame:
 
     def get_draw(self) -> ImageDraw:
         return self.__draw
+
+    @staticmethod
+    def print_text(x, y, text, font_size, board):
+        from Tools.Printer import Printer
+        Printer.img_print_text(x=x, y=y, text=text, font_size=font_size, board=board)
+
+    def print_map_on_board(self):
+        self.__map.print_map(self.__board)
+        return self
+
+    def add_frame(self, frames: list):
+        frames.append(self.get_board().copy())
+        return self
+
+    @staticmethod
+    def make_dir(path):
+        import os
+        path_parts = path.split('/')
+        bread_crumbs = ''
+        for part in path_parts:
+            bread_crumbs += part + '/'
+            if not os.path.isdir(bread_crumbs):
+                os.mkdir(bread_crumbs)
+
+    def safe_board(self, name, path: str):
+        from Tools.Printer import Printer
+        BoardGame.make_dir(path)
+        Printer.save_board(self.__board, name, path)
+
+    def make_gif(self, frames, speed, name, path):
+        BoardGame.make_dir(path)
+        frames[0].save(
+            f'{path}/{name}.gif',
+            save_all=True,
+            append_images=frames[1:],
+            optimize=True,
+            duration=speed,
+            loop=0
+        )
+        return self
