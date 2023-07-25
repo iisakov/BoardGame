@@ -1,44 +1,51 @@
-import datetime
+#!venv/bin/python
+from flask import Flask, render_template, request
+from datetime import datetime, date, timedelta
+import os
 
-import Components
-import Tools.Printer
+from Tools.Maker import Maker
 
-low_speed = 1500
-high_speed = 200
-count = 1
-size = 50
+app = Flask(__name__)
 
-game_num = 10
-for day in range(10):
-    for i in range(game_num):
-        frames = []
-        print('day:', day, 'game_name', i)
-        game = Components.BoardGame(num_players=4, num_gex_in_hand=2, size=size)
-        root_path_game_img = f'static/{datetime.date.today()-datetime.timedelta(day)}/img/game_{i+1}'
-        root_path_game_gif = f'static/{datetime.date.today()-datetime.timedelta(day)}/gif/game_{i+1}'
-        game.start().print_map_on_board().add_frame(frames).safe_board('initial_map', root_path_game_img)
-        game_round_num = 0
-        while game.get_num_gex_in_deck() > 0:
-            game_round_num += 1
-            for player in game.get_players():
-                for _ in range(game.get_num_gex_in_hand()):
-                    player.take_gex_in_hand(game.get_deck().pull_gex())
 
-            for player in game.get_players():
-                player_move_num = 0
-                while player.get_num_gex_in_hand() > 0:
-                    player_move_num += 1
-                    deployed = player.deploy_gex(game.get_map())
-                    if not deployed:
-                        game.get_discard().push_gex(player.discard_active_gex())
-                    game.print_map_on_board().add_frame(frames).safe_board(f'move_{player_move_num}', root_path_game_img + f'/map_by_moves/move_{game_round_num}/{player.get_name()}')
-                    print(day, i, player.get_name(), deployed)
-                game.print_map_on_board().safe_board('finished_map', root_path_game_img + f'/map_by_moves/move_{game_round_num}/{player.get_name()}')
-            game.print_map_on_board().safe_board('finished_map', root_path_game_img + f'/map_by_moves/move_{game_round_num}')
-        game.print_map_on_board().safe_board('finished_map', root_path_game_img)
+@app.route("/")
+def index():
+    return render_template('index.html', title='Добро пожаловать')
 
-        game.make_gif(frames, low_speed, 'finished_map_low_speed', root_path_game_gif)
-        game.make_gif(frames, high_speed, 'finished_map_high_speed', root_path_game_gif)
+
+@app.route("/board_game/gallery/")
+@app.route("/board_game/", methods=['GET'])
+def gallery():
+    param = request.args.to_dict()
+    if 'num_players' in param and 'num_gex' in param:
+        Maker.make_request_game(num_players=int(param['num_players']), num_gex_in_hand=int(param['num_gex']))
+    data = {'next_day': date.today() + timedelta(1),
+            'previous_day': date.today() - timedelta(1),
+            'now': date.today()}
+    return render_template('board_game/gallery_main.html', title='GEXOPOLICE', data=data)
+
+
+@app.route("/board_game/gallery/<day>")
+def gallery_for_day(day):
+    true_date = datetime.strptime(day, "%Y-%m-%d").date()
+    data = {'next_day': true_date + timedelta(1),
+            'previous_day': true_date - timedelta(1),
+            'true_day': true_date,
+            'now': date.today()}
+
+    items = os.listdir(f'./static/{true_date}/img/') if os.path.isdir(f'./static/{true_date}/img/') else 0
+    return render_template('board_game/gallery_day.html', title='GEXOPOLICE - Gallery', day=day, data=data, items=sorted(items) if type(items) == list else 0)
+
+
+@app.route("/board_game/gallery/<day>/<game>")
+def gallery_for_game(day, game):
+    true_date = datetime.strptime(day, "%Y-%m-%d").date()
+    data = {'next_day': true_date + timedelta(1),
+            'previous_day': true_date - timedelta(1),
+            'true_day': true_date,
+            'now': date.today()}
+    return render_template('board_game/gallery_game.html', title='GEXOPOLICE - Game', day=day, data=data, game=game)
+
 
 if __name__ == '__main__':
-    pass
+    app.run(host='0.0.0.0', debug=True)
