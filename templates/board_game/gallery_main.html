@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+    {% block main_menu %}
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Главная</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/board_game/gallery/{{data['previous_day']}}"><<</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/board_game/gallery/{{data['now']}}">Сегодня</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/board_game/gallery/{{data['next_day']}}">>></a>
+        </li>
+    {% endblock %}
+    {% block content %}
+        <h1>{{data['true_day']}}</h1>
+        <p>Описание что тут происходит и зачем</p>
+        <h4>Всемогущая форма</h4>
+        <form>
+            <div class="mb-3 form-floating">
+                <select name=num_players class="form-select" id="countPlayersSelect" aria-label="Floating label select example">
+                    <option value="1">Один</option>
+                    <option value="2">Два</option>
+                    <option value="3">Три</option>
+                    <option selected value="4">Четыре</option>
+                </select>
+                <label for="countPlayersSelect">Количество игроков</label>
+            </div>
+
+            <div class="mb-3 form-floating">
+                <select name=num_gex class="form-select" id="numGexSelect" aria-label="Floating label select example">
+                    <option value="1">Один</option>
+                    <option selected value="2">Два</option>
+                    <option value="3">Три</option>
+                </select>
+                <label for="numGexSelect">Количество тайлов на руках</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Создать</button>
+        </form>
+        <div class="row justify-content-center">
+            <div class="col-sm-4">
+                <img class="img-fluid" src="{{url_for('static', filename='board_game/requested_game')}}/gif/game/finished_map.gif"/>
+                <p>{{game}} finished_map</p>
+            </div>
+            <div class="col-sm-4">
+                <img class="img-fluid" src="{{url_for('static', filename='board_game/requested_game')}}/img/game/finished_map.jpg"/>
+                <p>{{game}} finished_map img</p>
+            </div>
+        </div>
+    {% endblock %}

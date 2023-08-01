@@ -1,17 +1,19 @@
 from datetime import date
+import os
 
 import Components
 
 
 class Maker:
     @staticmethod
-    def make_standard_game(gif_speed: int or list, game_num, size=50):
-        for i in range(game_num):
+    def make_standard_game(gif_speed: int or list, game_num, day=date.today(), size=50):
+        num_exist_game = len(os.listdir(path=f'static/board_game/{day}/img/')) if os.path.isdir(f'static/board_game/{day}/img/') else 0
+        for i in range(num_exist_game, game_num+num_exist_game):
 
             frames = []
             game = Components.BoardGame(num_players=4, num_gex_in_hand=2, num_steps=7, size=size)
-            root_path_game_img = f'static/{date.today()}/img/game_{i + 1}'
-            root_path_game_gif = f'static/{date.today()}/gif/game_{i + 1}'
+            root_path_game_img = f'static/board_game/{day}/img/game_{i + 1}'
+            root_path_game_gif = f'static/board_game/{day}/gif/game_{i + 1}'
             game.start().print_map_on_board().add_frame(frames).safe_board('initial_map', root_path_game_img)
             game_round_num = 0
             while game.get_num_gex_in_deck() > 0:
@@ -39,8 +41,8 @@ class Maker:
     def make_request_game(num_players, num_gex_in_hand, size=50):
         frames = []
         game = Components.BoardGame(num_players=num_players, num_gex_in_hand=num_gex_in_hand, num_steps=7, size=size)
-        root_path_game_img = f'static/requested_game/img/game'
-        root_path_game_gif = f'static/requested_game/gif/game'
+        root_path_game_img = f'static/board_game/requested_game/img/game'
+        root_path_game_gif = f'static/board_game/requested_game/gif/game'
         game.start().print_map_on_board().add_frame(frames).safe_board('initial_map', root_path_game_img)
         game_round_num = 0
         while game.get_num_gex_in_deck() > 0:

@@ -1,0 +1,25 @@
+{% extends 'board_game/gallery_main.html' %}
+    {% block main_menu %}
+    {{ super() }}
+    {% endblock %}
+    {% block content %}
+        <h1>{{data['true_day']}}</h1>
+        {% if items != 0 %}
+            <div class="row justify-content-center">
+            {% for item in items %}
+                <div class="col-sm-4 align-self-center">
+                    <a href="/board_game/gallery/{{data['true_day']}}/{{item}}">
+                        <img class="img-fluid" src="{{url_for('static', filename='')}}board_game/{{data['true_day']}}/img/{{item}}/finished_map.jpg"/>
+                    </a>
+                    <p>{{item}}</p>
+                </div>
+            {% endfor %}
+            </div>
+        {% else %}
+            <div>
+                <a href="/board_game/gallery/autogenerate_game/{{data['true_day']}}">Ещё не завезли. Создать одну?</a>
+            </div>
+        {% endif %}
+    {% endblock %}
+</body>
+</html>

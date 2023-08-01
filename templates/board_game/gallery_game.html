@@ -1,0 +1,23 @@
+{% extends 'board_game/gallery_main.html' %}
+    {% block main_menu %}
+    {{ super() }}
+        <li class="nav-item">
+            <a class="nav-link" href="/board_game/gallery/{{data['true_day']}}">Назад</a>
+        </li>
+    {% endblock %}
+    {% block content %}
+            <h1>{{data['true_day']}}: {{game}}</h1>
+            <div class="row justify-content-center">
+                <div class="col-sm-4">
+                    <img class="img-fluid" src="{{url_for('static', filename='')}}board_game/{{data['true_day']}}/gif/{{game}}/finished_map_speed_100.gif"/>
+                    <p>{{game}} finished_map</p>
+                </div>
+                <div class="col-sm-4">
+                    <img class="img-fluid" src="{{url_for('static', filename='')}}board_game/{{data['true_day']}}/img/{{game}}/finished_map.jpg"/>
+                    <p>{{game}} finished_map img</p>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+</body>
+</html>

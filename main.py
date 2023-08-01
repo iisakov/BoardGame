@@ -1,6 +1,7 @@
 #!venv/bin/python
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from datetime import datetime, date, timedelta
+import secrets, hashlib
 import os
 
 from Tools.Maker import Maker
@@ -33,7 +34,7 @@ def gallery_for_day(day):
             'true_day': true_date,
             'now': date.today()}
 
-    items = os.listdir(f'./static/{true_date}/img/') if os.path.isdir(f'./static/{true_date}/img/') else 0
+    items = os.listdir(f'./static/board_game/{true_date}/img/') if os.path.isdir(f'./static/board_game/{true_date}/img/') else 0
     return render_template('board_game/gallery_day.html', title='GEXOPOLICE - Gallery', day=day, data=data, items=sorted(items) if type(items) == list else 0)
 
 
@@ -47,5 +48,11 @@ def gallery_for_game(day, game):
     return render_template('board_game/gallery_game.html', title='GEXOPOLICE - Game', day=day, data=data, game=game)
 
 
+@app.route("/board_game/gallery/autogenerate_game/<day>")
+def gallery_autogenerate_game(day):
+    Maker.make_standard_game(100, 1, day=day)
+    return redirect(f'/board_game/gallery/{day}')
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0')
